@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Fullstack Chat App: Code Foo 9 Application</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+
+<body>
+  <h1>Chat App</h1>
+  <div class="container">
+    <ul id="chat">
+      <li>This is the start of the chat.</li>
+      <li>Test 1</li>
+      <li>Test 2</li>
+    </ul>
+  </div>
+  <form id="chatbar" action="">
+    <input type="text" id="message" placeholder="Say something!" />
+    <button id="send">Send</button>
+  </form>
+  <script src="/socket.io/socket.io.js"></script>
+  <script defer>
+    // Event Listeners
+    const message = document.getElementById('message');
+    const chat = document.getElementById('chat');
+
+    let socket = io();
+    const sendMessage = (e) => {
+      e.preventDefault();
+      socket.emit('new message', message.value);
+      message.value = '';
+    }
+
+    document.getElementById('chatbar').addEventListener('submit', sendMessage);
+
+    socket.on('new message', msg => {
+      chat.innerHTML += `<li>${msg}</li>`;
+    });
+  </script>
+</body>
+
+</html>
