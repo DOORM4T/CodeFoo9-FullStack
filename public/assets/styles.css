@@ -52,6 +52,15 @@ form {
   width:80%;
 }
 
+#message.animated.shake {
+  border-color:red;
+  color:red;
+}
+
+#message:disabled{
+  background-color:white;
+}
+
 #send {
   height:32px;
   border-radius: 0 10px 10px 0;

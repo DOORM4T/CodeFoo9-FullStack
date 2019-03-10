@@ -21,6 +21,6 @@ io.on('connection', (socket) => {
   // Handle chat message sending
   socket.on('new message', msg => {
     // Tell all clients to add message.
-    io.emit('new message', msg);
+    io.emit('get message', msg);
   });
 });

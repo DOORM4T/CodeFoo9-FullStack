@@ -7,6 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Fullstack Chat App: Code Foo 9 Application</title>
   <link rel="stylesheet" href="/assets/styles.css">
+  <!-- Animate.css CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
 </head>
 
 <body>
@@ -14,11 +16,13 @@
   <div class="container">
     <ul id="chat">
       <li>This is the start of the chat.</li>
-      <li>Test 1</li>
-      <li>Test 2</li>
+
+      <!-- End element used for Quick Scrolling to bottom of chat -->
+      <br id="end" />
+      <br id="scrollHere" />
     </ul>
   </div>
-  <form id="chatbar" action="">
+  <form id="chatbar" action="" autocomplete="off">
     <input type="text" id="message" placeholder="Say something!" />
     <button id="send">Send</button>
   </form>
@@ -27,18 +31,33 @@
     // Event Listeners
     const message = document.getElementById('message');
     const chat = document.getElementById('chat');
+    const send = document.getElementById('send');
 
     let socket = io();
     const sendMessage = (e) => {
       e.preventDefault();
-      socket.emit('new message', message.value);
-      message.value = '';
+      if (message.value != '') {
+        socket.emit('new message', message.value);
+        // Scroll to bottom of chat when client sends message
+        message.value = '';
+        document.querySelector('#scrollHere').scrollIntoView({ behavior: 'smooth' });
+      }
+      else {
+        message.className = 'animated shake';
+        message.setAttribute('disabled', true);
+        setTimeout(() => {
+          message.classList = '';
+          message.removeAttribute('disabled');
+        }, 400);
+      }
     }
 
     document.getElementById('chatbar').addEventListener('submit', sendMessage);
 
-    socket.on('new message', msg => {
-      chat.innerHTML += `<li>${msg}</li>`;
+    socket.on('get message', msg => {
+      let message = document.createElement('li');
+      message.appendChild(document.createTextNode(msg));
+      chat.insertBefore(message, document.querySelector('#end'));
     });
   </script>
 </body>
