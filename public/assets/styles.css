@@ -18,6 +18,7 @@ body {
   background-color: var(--citrus);
 }
 
+/* The Chat! */
 .container {
   background-color:#fff;
   box-shadow:0 0 5px var(--blueberry);
@@ -27,23 +28,35 @@ body {
   margin:1rem;
 }
 
+/* Hide scrollbar (Works only in browsers w/ WebKit) */
 ::-webkit-scrollbar { 
   display: none; 
 }
 
+/* List of messages */
 #chat {
   padding:0;
   margin: 0 1rem 1rem 1rem;
   list-style: none;
 }
 
+/* Individual messages */
 #chat li {
+  transition:all 0.2s ease-out;
   text-align:left;
-  padding: 1rem 0 1rem 0;
+  padding: 1rem 0.5rem;
   border-bottom:1px solid rgba(0, 0,0,0.2);
+  cursor:pointer;
 }
 
-form {
+#chat li:hover{
+  transition:all 0.5s ease-out;
+  letter-spacing: 0.2px;
+  border-radius:4px;
+}
+
+/* Chatbar */
+#chatbar {
   position:absolute;
   display:grid;
   grid-template-columns: repeat(4,1fr) 5fr 48px 10px;
@@ -60,6 +73,7 @@ form {
 
 }
 
+/* Logo. */
 #logo {
   grid-area: logo;
   font-weight:800;
@@ -68,12 +82,14 @@ form {
   cursor:pointer;
 }
 
+/* User input */
 #message {
   font-family:'sniglet';
   grid-area: msg;
   height:32px;
   padding: 0 8px;
   border-radius:4px 0 0 4px;
+  color:var(--blueberry);
 }
 
 #message.animated.shake {
@@ -81,13 +97,17 @@ form {
   color:red;
 }
 
+#message:focus {
+  border-color:var(--blueberry);
+}
+
 #message:disabled{
   background-color:white;
 }
 
+/* Send message button */
 #send {
   transition: all 0.1s ease-out;
-  font-family:'sniglet';
   grid-area: send;
   height:34px;
   border:none;
@@ -95,14 +115,139 @@ form {
   color: #fff;
   background-color:var(--apricot);
   outline:none;
-  border-bottom:5px solid orangered;
+  border-bottom:5px solid rgb(192, 102, 0);
   cursor:pointer;
 }
 
 #send:active {
   transition: all 0.1s ease-out;
   color:rgb(190, 190, 190);
-  background-color: orangered;
+  background-color: rgb(255, 145, 0);
   border-bottom:2px solid orangered;
+}
 
+/* Show button press when ENTER is pressed */
+#send.pressed {
+  transition: all 0.1s ease-out;
+  color:rgb(190, 190, 190);
+  background-color: rgb(255, 145, 0);
+  border-bottom:2px solid orangered;
+}
+
+
+/* User Form for "Registration" */
+#darkness{
+  position:fixed;
+  z-index:1;
+  background-color:rgba(0,0,0,0.8);
+  width:100vw;
+  height:100vh;
+  display:flex;
+  align-content:center;
+  justify-content:center;
+}
+
+/* Container for form + image*/
+#authContainer {
+  top:10%;
+  width:90%;
+  max-width:700px;
+  height:80%;
+  position:fixed;
+  background-color:var(--apple);
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius:4px;
+}
+
+/* Labels */
+#label1 {
+  color: var(--apricot);
+  margin-top:-2rem;
+  margin-bottom:2rem;
+  font-weight:800;
+}
+
+#label2 {
+  margin-bottom:1rem;
+}
+
+/* Form */
+#newUser{
+  padding:1rem;
+  width:50%;
+  display:flex;
+  flex-direction:column;
+  margin-top:8rem;
+}
+
+/* Input */
+#username{
+  transition:all 0.3s ease-out;
+  font-family:'sniglet';
+  font-size:48px;
+  text-align:center;
+  height:64px;
+  padding: 0 0.5rem;
+  border-radius:4px;
+  color:var(--blueberry);
+}
+
+#username:focus {
+  transition:all 0.5s ease-out;
+  border-color:var(--blueberry);
+}
+/* Button */
+#joinChat{
+  transition:all 0.3s ease-out;
+  margin-top:1rem;
+  border:none;
+  color:#fff;
+  background-color: var(--blueberry);
+  border-bottom:5px solid darkslateblue;
+  border-radius:4px;
+  height:36px;
+}
+
+#joinChat:active{
+  transition:all 0.2s ease-out;
+  border-bottom:2px solid darkslateblue;
+}
+
+/* Image (From undraw.io) */
+#undraw{
+  display:block;
+  user-select:none;
+  position:fixed;
+  width:32rem;
+  top:0;
+  right:0;
+
+
+}
+
+@media screen and (min-width:1150px){
+  #undraw {
+    right:12rem;
+  }
+}
+
+@media screen and (max-width:900px){
+  #authContainer {
+    max-width:300px;
+  }
+
+  #undraw {
+    display:none;
+  }
+}
+
+@media screen and (max-width:320px){
+  #authContainer {
+    min-width:300px;
+  }
+
+  #undraw {
+    display:none;
+  }
 }

@@ -8,7 +8,7 @@
     "dev": "nodemon server"
   },
   "keywords": [],
-  "author": "",
+  "author": "Matt Seto",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
