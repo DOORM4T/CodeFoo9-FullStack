@@ -1,27 +1,33 @@
+
 html, body {
+  /* Variables */
+  --blueberry:#6B7A8F;
+  --apricot:#F7882F;
+  --citrus:#F7C331;
+  --apple: #DCC7AA;
+
   padding:0;
   margin:0;
   overflow:hidden;
+  font-family: 'Sniglet',cursive;
 }
 
 body {
   text-align:center;
-  background-color:rgb(77, 160, 228);
-}
-
-h1 {
-  color:#fff;
-  line-height:1rem;
-  font-size:2rem;
+  background-color: var(--citrus);
 }
 
 .container {
-  background-color:#ffffff;
-  border: 1px solid black;
-  height:80vh;
+  background-color:#fff;
+  box-shadow:0 0 5px var(--blueberry);
+  height:85vh;
   overflow-y:scroll;
-  margin:0 1rem;
-  border-radius:8px;
+  border-radius:4px;
+  margin:1rem;
+}
+
+::-webkit-scrollbar { 
+  display: none; 
 }
 
 #chat {
@@ -38,18 +44,28 @@ h1 {
 
 form {
   position:absolute;
+  display:flex;
+  align-items:center;
+  justify-content: center;
+
   bottom:0;
-  padding:0.5rem;
   background-color:#fff;
   width:100%;
   border: 1px solid black;
   box-shadow: 0 0 1rem black;
+  padding:0.5rem;
+
+}
+
+#logo {
+  font-weight:800;
+  color: var(--apricot);
 }
 
 #message {
-  padding:0 1rem;
   height:32px;
-  width:80%;
+  width:50%;
+  padding: 0 8px;
 }
 
 #message.animated.shake {
@@ -64,13 +80,14 @@ form {
 #send {
   height:32px;
   border-radius: 0 10px 10px 0;
-  color: rgb(77, 160, 228);
-  border: 1px solid rgb(77, 160, 228);
+  color: var(--apricot);
+  border: 1px solid var(--apricot);
+  cursor:pointer;
 }
 
 #send:hover {
   transition: all 0.3s ease-out;
-  background-color: rgb(77, 160, 228);
+  background-color: var(--apricot);
   color: #fff;
 }
 
