@@ -17,10 +17,10 @@
 </head>
 
 <body>
-  <div id="auth" class="visible">
+  <div id="auth">
     <div id="darkness">
       <div id="authContainer">
-        <form id="newUser" action="">
+        <form id="newUser" action="" autocomplete="off">
           <label id="label1">Join the chat!</label>
           <label id="label2">Enter a username others may identify you by.</label>
           <input id="username" type="text" placeholder="Username" />
@@ -53,6 +53,9 @@
     const message = document.getElementById('message');
     const chat = document.getElementById('chat');
     const send = document.getElementById('send');
+    const auth = document.getElementById('auth');
+    const username = document.getElementById('username');
+    const joinChat = document.getElementById('joinChat');
 
     // Call button press when ENTER is pressed
     message.addEventListener('keydown', (e) => {
@@ -63,32 +66,64 @@
     });
 
 
+    // User "Login"
+    let user; // User's name in the chat
+    // SOCKET CONNECTION
     let socket = io();
-    const sendMessage = (e) => {
+
+    joinChat.addEventListener('click',(e)=>{
       e.preventDefault();
-      if (message.value != '') {
-        socket.emit('new message', message.value);
-        // Scroll to bottom of chat when client sends message
-        message.value = '';
-        document.querySelector('#scrollHere').scrollIntoView({ behavior: 'smooth' });
-      }
-      else {
-        message.className = 'animated shake';
-        message.setAttribute('disabled', true);
-        setTimeout(() => {
-          message.classList = '';
-          message.removeAttribute('disabled');
-        }, 300);
-      }
-    }
+      if(username.value != '') {
+        auth.className='hidden';
+        user = username.value;
+        console.log(`Welcome to the chat, ${user}!`);
 
-    document.getElementById('chatbar').addEventListener('submit', sendMessage);
+        // Announce new user
+        socket.emit('new user', user);
 
-    socket.on('get message', msg => {
-      let message = document.createElement('li');
-      message.appendChild(document.createTextNode(msg));
-      chat.insertBefore(message, document.querySelector('#end'));
+        // Chat Functions
+        const sendMessage = (e) => {
+          e.preventDefault();
+          if (message.value != '') {
+            socket.emit('new message', {user, msg:message.value});
+            // Scroll to bottom of chat when client sends message
+            message.value = '';
+            document.querySelector('#scrollHere').scrollIntoView({ behavior: 'smooth' });
+          }
+          else {
+            // Invalid message
+            message.className = 'animated shake';
+            message.setAttribute('disabled', true);
+            setTimeout(() => {
+              message.classList = '';
+              message.removeAttribute('disabled');
+            }, 300);
+          }
+        }
+        // Call sendMessage on form submit
+        document.getElementById('chatbar').addEventListener('submit', sendMessage);
+
+
+        // BROADCASTS FROM SERVER
+        // Add messages to chat
+        socket.on('get message', data => {
+          let message = document.createElement('li');
+          message.innerHTML=`${(data.user === user) ? '[You]&nbsp':''} <span class="user">${data.user}:</span>&nbsp&nbsp${data.msg}`;
+          chat.insertBefore(message, document.querySelector('#end'));
+        });
+
+        // Announce new user
+        socket.on('announce user',(user)=>{
+          let message = document.createElement('li');
+          message.appendChild(document.createTextNode(`${user} has joined the chat!`));
+          message.classList.add('userJoin');
+          chat.insertBefore(message, document.querySelector('#end'));
+        });
+      }
     });
+    
+
+    
   </script>
 </body>
 

@@ -4,6 +4,7 @@ html, body {
   --blueberry:#6B7A8F;
   --apricot:#F7882F;
   --citrus:#F7C331;
+  --lime:rgb(90, 187, 114);
   --apple: #DCC7AA;
 
   padding:0;
@@ -53,6 +54,19 @@ body {
   transition:all 0.5s ease-out;
   letter-spacing: 0.2px;
   border-radius:4px;
+}
+
+/* "User has joined the chat" message */
+#chat li.userJoin {
+  font-weight: 800;
+  color:var(--lime);
+}
+
+/* Username styles */
+.user{
+  font-weight:800;
+  color:#000;
+  text-decoration: underline;
 }
 
 /* Chatbar */
@@ -136,24 +150,33 @@ body {
 
 
 /* User Form for "Registration" */
+#auth.hidden {
+  display:none;
+}
+
 #darkness{
   position:fixed;
   z-index:1;
   background-color:rgba(0,0,0,0.8);
   width:100vw;
   height:100vh;
+  /* display:flex; */
+  /* align-content:center; */
+  /* justify-content:center; */
   display:flex;
-  align-content:center;
-  justify-content:center;
 }
 
 /* Container for form + image*/
+
 #authContainer {
-  top:10%;
   width:90%;
+  align-self:center;
+  margin:auto;
   max-width:700px;
   height:80%;
-  position:fixed;
+  max-height:450px;
+  min-height:350px;
+  position:relative;
   background-color:var(--apple);
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -166,6 +189,7 @@ body {
   margin-top:-2rem;
   margin-bottom:2rem;
   font-weight:800;
+  font-size:36px;
 }
 
 #label2 {
@@ -207,6 +231,7 @@ body {
   border-bottom:5px solid darkslateblue;
   border-radius:4px;
   height:36px;
+  cursor:pointer;
 }
 
 #joinChat:active{
@@ -218,17 +243,18 @@ body {
 #undraw{
   display:block;
   user-select:none;
-  position:fixed;
+  position:relative;
   width:32rem;
-  top:0;
-  right:0;
-
-
 }
 
 @media screen and (min-width:1150px){
   #undraw {
     right:12rem;
+  }
+}
+@media screen and (min-width:900px){
+  #undraw {
+    right:15rem;
   }
 }
 
