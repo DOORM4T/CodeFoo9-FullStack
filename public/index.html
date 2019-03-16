@@ -107,8 +107,10 @@
         // BROADCASTS FROM SERVER
         // Add messages to chat
         socket.on('get message', data => {
+          // Use Regex to remove (potentially harmful) html tags from user input.
+          msg = data.msg.replace(/(<([^>]+)>)/gm,"");
           let message = document.createElement('li');
-          message.innerHTML=`${(data.user === user) ? '[You]&nbsp':''} <span class="user">${data.user}:</span>&nbsp&nbsp${data.msg}`;
+          message.innerHTML=`${(data.user === user) ? '[You]&nbsp':''} <span class="user">${data.user}:</span>&nbsp&nbsp${msg}`;
           chat.insertBefore(message, document.querySelector('#end'));
         });
 
@@ -117,6 +119,14 @@
           let message = document.createElement('li');
           message.appendChild(document.createTextNode(`${user} has joined the chat!`));
           message.classList.add('userJoin');
+          chat.insertBefore(message, document.querySelector('#end'));
+        });
+
+        // User Disconnected
+        socket.on('user disconnected',name=>{
+          let message = document.createElement('li');
+          message.appendChild(document.createTextNode(`${name} has left the chat.`));
+          message.classList.add('userDisconnect');
           chat.insertBefore(message, document.querySelector('#end'));
         });
       }
