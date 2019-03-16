@@ -5,6 +5,7 @@ html, body {
   --apricot:#F7882F;
   --citrus:#F7C331;
   --lime:rgb(90, 187, 114);
+  --watermelon:rgb(199, 74, 74);
   --apple: #DCC7AA;
 
   padding:0;
@@ -60,6 +61,12 @@ body {
 #chat li.userJoin {
   font-weight: 800;
   color:var(--lime);
+}
+
+/* "User has disconnected chat" message */
+#chat li.userDisconnect {
+  font-weight: 800;
+  color:var(--watermelon);
 }
 
 /* Username styles */

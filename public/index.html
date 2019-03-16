@@ -35,8 +35,6 @@
 
   <div class="container">
     <ul id="chat">
-      <li>This is the start of the chat.</li>
-
       <!-- End element used for Quick Scrolling to bottom of chat -->
       <br id="end" />
       <br id="scrollHere" />
@@ -56,6 +54,7 @@
     const auth = document.getElementById('auth');
     const username = document.getElementById('username');
     const joinChat = document.getElementById('joinChat');
+    const end = document.getElementById('end');
 
     // Call button press when ENTER is pressed
     message.addEventListener('keydown', (e) => {
@@ -70,6 +69,17 @@
     let user; // User's name in the chat
     // SOCKET CONNECTION
     let socket = io();
+
+    // Render all previous messages from DB
+    socket.on('initial render',data=>{
+      console.log(data);
+      data.forEach(item => {
+        console.log(item.message);
+        let message = document.createElement('li');
+        message.appendChild(document.createTextNode(`${item.user ? item.user+": ":''}${item.message}`));
+        chat.insertBefore(message, end);
+      });
+    });
 
     joinChat.addEventListener('click',(e)=>{
       e.preventDefault();
@@ -111,7 +121,7 @@
           msg = data.msg.replace(/(<([^>]+)>)/gm,"");
           let message = document.createElement('li');
           message.innerHTML=`${(data.user === user) ? '[You]&nbsp':''} <span class="user">${data.user}:</span>&nbsp&nbsp${msg}`;
-          chat.insertBefore(message, document.querySelector('#end'));
+          chat.insertBefore(message, end);
         });
 
         // Announce new user
@@ -119,7 +129,7 @@
           let message = document.createElement('li');
           message.appendChild(document.createTextNode(`${user} has joined the chat!`));
           message.classList.add('userJoin');
-          chat.insertBefore(message, document.querySelector('#end'));
+          chat.insertBefore(message, end);
         });
 
         // User Disconnected
@@ -127,7 +137,7 @@
           let message = document.createElement('li');
           message.appendChild(document.createTextNode(`${name} has left the chat.`));
           message.classList.add('userDisconnect');
-          chat.insertBefore(message, document.querySelector('#end'));
+          chat.insertBefore(message, end);
         });
       }
     });
