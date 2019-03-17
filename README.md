@@ -8,5 +8,5 @@ The fullstack component of my application for IGN's Code Foo 9!
 ### Ingredients
 - Socket.io
 - Express
-- MongoDB Atlas (Todo!) + Mongoose?
+- MongoDB Atlas
 - Vanilla JavaScript + HTML/CSS
