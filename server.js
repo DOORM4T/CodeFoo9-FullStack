@@ -66,5 +66,16 @@ client.connect(err => {
       io.emit('get message', data);
       addMessage(data);
     });
+
+    let typers = new Set();
+    socket.on('user is typing', user => {
+      typers.add(user);
+      io.emit('user is typing', [...typers]);
+    })
+
+    socket.on('user stopped typing', user => {
+      typers.delete(user);
+      io.emit('user is typing', [...typers])
+    })
   });
 });

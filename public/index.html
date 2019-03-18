@@ -17,6 +17,9 @@
 </head>
 
 <body>
+  <!-- User "Authentication" -->
+  <!-- NOTE: Not actual authentication -->
+  <!-- Users can use any name to join the chat -->
   <div id="auth">
     <div id="darkness">
       <div id="authContainer">
@@ -36,13 +39,27 @@
   <div class="container">
     <ul id="chat">
       <li>This is the beginning of the chat.</li>
+
+      <!-- User is Typing Small-Text -->
+
       <!-- End element used for Quick Scrolling to bottom of chat -->
       <br id="end" />
+      <span id="userTyping"></span>
       <br id="scrollHere" />
     </ul>
   </div>
+  <!-- Scroll to Bottom Button -->
+  <button id="scrollToBottom">\/</button>
   <form id="chatbar" action="" autocomplete="off">
     <label id="logo">Ch@pp!</label>
+    <!-- Light/Dark Mode? -->
+    <!-- <form id="theme">
+      <input type="radio">Dark</input>
+      <input type="radio">Light</input>
+    </form> -->
+
+
+    <!-- User Input for Chat -->
     <input type="text" id="message" placeholder="Say something!" />
     <button id="send"><i class="fas fa-arrow-circle-right"></i></button>
   </form>
@@ -56,7 +73,13 @@
     const username = document.getElementById('username');
     const joinChat = document.getElementById('joinChat');
     const end = document.getElementById('end');
+    const userTyping = document.getElementById('userTyping');
 
+    // Scroll to bottom button
+    document.getElementById('scrollToBottom').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelector('#scrollHere').scrollIntoView({ behavior: 'smooth' });
+    });
     // Call button press when ENTER is pressed
     message.addEventListener('keydown', (e) => {
       if (e.keyCode === 13 && message.value != '') {
@@ -65,7 +88,6 @@
       }
     });
 
-
     // User "Login"
     let user; // User's name in the chat
     // SOCKET CONNECTION
@@ -73,9 +95,9 @@
 
     // Render all previous messages from DB
     socket.on('initial render', data => {
-      console.log(data);
+      // console.log(data);
       data.forEach(item => {
-        console.log(item.message);
+        // console.log(item.message);
         let message = document.createElement('li');
         message.innerHTML = `${(item.time) ? '<span class="timestamp">' + item.time + '</span>' : ''} ${(item.user === user) ? '[You]&nbsp' : ''} <span class="user">${item.user ? item.user + ":" : ''}</span>&nbsp&nbsp${item.message}`;
         // Styling if sender is not you/message is an announcement
@@ -105,8 +127,8 @@
             let timestamp = `${d.getMonth()}/${d.getDate()}/${d.getFullYear()} ${d.getHours()}:${(d.getMinutes() < 10) ? "0" + d.getMinutes() : d.getMinutes()}`;
             socket.emit('new message', { user, msg, timestamp });
             // Scroll to bottom of chat when client sends message
-            message.value = '';
             document.querySelector('#scrollHere').scrollIntoView({ behavior: 'smooth' });
+            message.value = '';
           }
           else {
             // Invalid message
@@ -148,9 +170,23 @@
           message.classList.add('userDisconnect');
           chat.insertBefore(message, end);
         });
+
+        const userIsTyping = () => {
+          socket.emit('user is typing', user);
+        }
+        message.addEventListener('keydown', userIsTyping);
+        message.addEventListener('keyup', () => {
+          socket.emit('user stopped typing', user);
+        });
+
+        socket.on('user is typing', users => {
+          if (users[0] !== undefined)
+            userTyping.innerHTML = ` ${(users.length > 1) ? 'Others are' : users[0] + " is"} typing...`;
+          else
+            userTyping.innerHTML = '';
+        });
       }
     });
-
 
 
   </script>
