@@ -35,6 +35,7 @@
 
   <div class="container">
     <ul id="chat">
+      <li>This is the beginning of the chat.</li>
       <!-- End element used for Quick Scrolling to bottom of chat -->
       <br id="end" />
       <br id="scrollHere" />
@@ -71,20 +72,23 @@
     let socket = io();
 
     // Render all previous messages from DB
-    socket.on('initial render',data=>{
+    socket.on('initial render', data => {
       console.log(data);
       data.forEach(item => {
         console.log(item.message);
         let message = document.createElement('li');
-        message.appendChild(document.createTextNode(`${item.user ? item.user+": ":''}${item.message}`));
+        message.innerHTML = `${(item.time) ? '<span class="timestamp">' + item.time + '</span>' : ''} ${(item.user === user) ? '[You]&nbsp' : ''} <span class="user">${item.user ? item.user + ":" : ''}</span>&nbsp&nbsp${item.message}`;
+        // Styling if sender is not you/message is an announcement
+        if (item.user !== user || !item.user)
+          message.classList.add('notYou');
         chat.insertBefore(message, end);
       });
     });
 
-    joinChat.addEventListener('click',(e)=>{
+    joinChat.addEventListener('click', (e) => {
       e.preventDefault();
-      if(username.value != '') {
-        auth.className='hidden';
+      if (username.value != '') {
+        auth.className = 'hidden';
         user = username.value;
         console.log(`Welcome to the chat, ${user}!`);
 
@@ -95,7 +99,11 @@
         const sendMessage = (e) => {
           e.preventDefault();
           if (message.value != '') {
-            socket.emit('new message', {user, msg:message.value});
+            // Use Regex to remove (potentially harmful) html tags from user input.
+            msg = message.value.replace(/(<([^>]+)>)/gm, "");
+            let d = new Date();
+            let timestamp = `${d.getMonth()}/${d.getDate()}/${d.getFullYear()} ${d.getHours()}:${(d.getMinutes() < 10) ? "0" + d.getMinutes() : d.getMinutes()}`;
+            socket.emit('new message', { user, msg, timestamp });
             // Scroll to bottom of chat when client sends message
             message.value = '';
             document.querySelector('#scrollHere').scrollIntoView({ behavior: 'smooth' });
@@ -117,15 +125,16 @@
         // BROADCASTS FROM SERVER
         // Add messages to chat
         socket.on('get message', data => {
-          // Use Regex to remove (potentially harmful) html tags from user input.
-          msg = data.msg.replace(/(<([^>]+)>)/gm,"");
           let message = document.createElement('li');
-          message.innerHTML=`${(data.user === user) ? '[You]&nbsp':''} <span class="user">${data.user}:</span>&nbsp&nbsp${msg}`;
+          message.innerHTML = `<span class="timestamp">${data.timestamp}</span> ${(data.user === user) ? '[You]&nbsp:' : ''} <span class="user">${data.user}</span>&nbsp&nbsp${data.msg}`;
+          // Styling if sender is not you/message is an announcement
+          if (data.user !== user || !data.user)
+            message.classList.add('notYou');
           chat.insertBefore(message, end);
         });
 
         // Announce new user
-        socket.on('announce user',(user)=>{
+        socket.on('announce user', (user) => {
           let message = document.createElement('li');
           message.appendChild(document.createTextNode(`${user} has joined the chat!`));
           message.classList.add('userJoin');
@@ -133,7 +142,7 @@
         });
 
         // User Disconnected
-        socket.on('user disconnected',name=>{
+        socket.on('user disconnected', name => {
           let message = document.createElement('li');
           message.appendChild(document.createTextNode(`${name} has left the chat.`));
           message.classList.add('userDisconnect');
@@ -141,9 +150,9 @@
         });
       }
     });
-    
 
-    
+
+
   </script>
 </body>
 

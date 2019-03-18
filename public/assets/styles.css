@@ -25,6 +25,7 @@ body {
   background-color:#fff;
   box-shadow:0 0 5px var(--blueberry);
   height:85vh;
+  overflow-x:hidden;
   overflow-y:scroll;
   border-radius:4px;
   margin:1rem;
@@ -40,22 +41,41 @@ body {
   padding:0;
   margin: 0 1rem 1rem 1rem;
   list-style: none;
+  display:flex;
+  flex-direction:column;
 }
 
 /* Individual messages */
 #chat li {
+  align-self:flex-start;
   transition:all 0.2s ease-out;
   text-align:left;
-  padding: 1rem 0.5rem;
-  border-bottom:1px solid rgba(0, 0,0,0.2);
+  padding: 1rem 2rem;
+  border-bottom:2px solid rgba(0, 0,0,0.2);
   cursor:pointer;
+  word-wrap:break-word;
+  border-radius:16px;
+  margin: 1rem 0;
+  background-color:rgba(112, 212, 112, 0.6);
 }
 
-#chat li:hover{
-  transition:all 0.5s ease-out;
-  letter-spacing: 0.2px;
-  border-radius:4px;
+#chat li.notYou {
+  align-self:flex-end;
+  text-align:right;
+  background-color:rgba(135, 207, 235, 0.6);
 }
+
+
+/* Timestamp Text */
+.timestamp {
+  font-weight: 0;
+  color:#aaa;
+}
+
+.timestamp:hover {
+  transition:all 0.5s ease-out;
+  color:#fff;
+} 
 
 /* "User has joined the chat" message */
 #chat li.userJoin {
@@ -249,9 +269,10 @@ body {
 /* Image (From undraw.io) */
 #undraw{
   display:block;
-  user-select:none;
+  user-select:no-[ne;
   position:relative;
   width:32rem;
+  top:-4rem;
 }
 
 @media screen and (min-width:1150px){

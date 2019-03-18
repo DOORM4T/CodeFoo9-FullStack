@@ -24,14 +24,14 @@ client.connect(err => {
 
     // Add alert to DB
     const addAlert = msg => {
-      collection.insertOne({message:msg}, ()=>{
+      collection.insertOne({ message: msg }, () => {
         console.log(`Added ${msg} to Database.`)
       });
     }
     // Add message (username included) to DB
     const addMessage = data => {
-      collection.insertOne({user:data.user,message:data.msg}, ()=>{
-        console.log(`Added ${data.user}:${data.msg} to Database.`)
+      collection.insertOne({ user: data.user, message: data.msg, time: data.timestamp }, () => {
+        console.log(`Added ${data.timestamp} ${data.user}:${data.msg} to Database.`)
       });
     }
 
@@ -40,28 +40,28 @@ client.connect(err => {
     console.log(`(ID:${id}) User connected...`)
 
     // Broadcasting new user entering chat
-    socket.on('new user',async user=>{
+    socket.on('new user', async user => {
       // Render messages from DB on client chat
       let data = await collection.find({}).toArray();
       socket.emit('initial render', data);
 
       // Announce new user to other users
-      username=user;
-      io.emit('announce user',username);
+      username = user;
+      io.emit('announce user', username);
       addAlert(`${user} has joined the chat!`);
     });
 
     // Handle user disconnect
-    socket.on('disconnect', () =>{ 
-      if(username !== undefined){
+    socket.on('disconnect', () => {
+      if (username !== undefined) {
         console.log(`(ID:${id}) User disconnected...`)
-        io.emit('user disconnected',username);
+        io.emit('user disconnected', username);
         addAlert(`${username} has left the chat.`);
       }
     });
 
     // Handle chat message sending
-    socket.on('new message', data => {         
+    socket.on('new message', data => {
       // Tell all clients to add message.
       io.emit('get message', data);
       addMessage(data);
