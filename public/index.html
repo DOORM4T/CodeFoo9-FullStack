@@ -43,7 +43,7 @@
       <!-- End element used for Quick Scrolling to bottom of chat -->
       <br id="end" />
       <span id="userTyping"></span>
-      <br id="scrollHere" />
+      <div id="scrollHere" style="margin-top:100px;visibility:hidden">Test</div>
     </ul>
   </div>
   <!-- Scroll to Bottom Button -->
@@ -72,11 +72,12 @@
     const joinChat = document.getElementById('joinChat');
     const end = document.getElementById('end');
     const userTyping = document.getElementById('userTyping');
+    const scrollHere = document.getElementById('scrollHere');
 
     // Scroll to bottom button
     document.getElementById('scrollToBottom').addEventListener('click', (e) => {
       e.preventDefault();
-      document.querySelector('#scrollHere').scrollIntoView({ behavior: 'smooth' });
+      scrollHere.scrollIntoView({behavior:'smooth'});
     });
     // Call button press when ENTER is pressed
     message.addEventListener('keydown', (e) => {
@@ -125,7 +126,7 @@
             let timestamp = `${d.getMonth()}/${d.getDate()}/${d.getFullYear()} ${d.getHours()}:${(d.getMinutes() < 10) ? "0" + d.getMinutes() : d.getMinutes()}`;
             socket.emit('new message', { user, msg, timestamp });
             // Scroll to bottom of chat when client sends message
-            document.querySelector('#scrollHere').scrollIntoView({ behavior: 'smooth' });
+            scrollHere.scrollIntoView({behavior:'smooth'});
             message.value = '';
           }
           else {
