@@ -31,7 +31,7 @@ Oh boy... We have a problem. There aren't any other users to chat with!
 
 Here's a little workaround, for testing purposes. To add more users to the chat, simply open a new window and once again, navigate to `http://localhost:8000`. Enter a different username and start chatting with yourself!
 
-You can also chat with other users on different computers by accessing this project at:
+You can also chat with other users on different computers by accessing this project at:<br>
 https://doormatt-codefoo9-fullstack.herokuapp.com/
 <br>
 That's All Folks!
