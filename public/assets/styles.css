@@ -31,11 +31,6 @@ body {
   margin:1rem;
 }
 
-/* Hide scrollbar (Works only in browsers w/ WebKit) */
-::-webkit-scrollbar { 
-  display: none; 
-}
-
 /* List of messages */
 #chat {
   padding:0;
@@ -206,24 +201,20 @@ body {
 /* Container for form + image*/
 
 #authContainer {
-  width:90%;
+  max-width:90vw;
+  justify-self:center;
   align-self:center;
   margin:auto;
-  max-width:700px;
-  height:80%;
-  max-height:450px;
-  min-height:350px;
   position:relative;
   background-color:var(--apple);
-  display:grid;
-  grid-template-columns: 1fr 1fr;
   border-radius:4px;
 }
+
 
 /* Labels */
 #label1 {
   color: var(--apricot);
-  margin-top:-2rem;
+  margin-top:-6rem;
   margin-bottom:2rem;
   font-weight:800;
   font-size:36px;
@@ -236,10 +227,10 @@ body {
 /* Form */
 #newUser{
   padding:1rem;
-  width:50%;
   display:flex;
   flex-direction:column;
   margin-top:8rem;
+  align-content: center;
 }
 
 /* Input */
@@ -249,6 +240,8 @@ body {
   font-size:48px;
   text-align:center;
   height:64px;
+  max-width:100vw;
+
   padding: 0 0.5rem;
   border-radius:4px;
   color:var(--blueberry);
@@ -269,49 +262,10 @@ body {
   border-radius:4px;
   height:36px;
   cursor:pointer;
+  max-width:100vw;
 }
 
 #joinChat:active{
   transition:all 0.2s ease-out;
   border-bottom:2px solid darkslateblue;
-}
-
-/* Image (From undraw.io) */
-#undraw{
-  display:block;
-  user-select:no-[ne;
-  position:relative;
-  width:32rem;
-  top:-4rem;
-}
-
-@media screen and (min-width:1150px){
-  #undraw {
-    right:12rem;
-  }
-}
-@media screen and (min-width:900px){
-  #undraw {
-    right:15rem;
-  }
-}
-
-@media screen and (max-width:900px){
-  #authContainer {
-    max-width:300px;
-  }
-
-  #undraw {
-    display:none;
-  }
-}
-
-@media screen and (max-width:320px){
-  #authContainer {
-    min-width:300px;
-  }
-
-  #undraw {
-    display:none;
-  }
 }
