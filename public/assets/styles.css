@@ -269,3 +269,18 @@ body {
   transition:all 0.2s ease-out;
   border-bottom:2px solid darkslateblue;
 }
+
+#alertMessage {
+  display:none;
+  overflow:hidden;
+  position:fixed;
+  top:1rem;
+  left:0;
+  right:0;
+  margin: 0 1rem;
+  border-radius:0 0 4px 4px;
+  opacity:0.9;
+  height:48px;
+  background-color:var(--blueberry);
+  border-top:2px solid #666;
+}

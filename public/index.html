@@ -32,8 +32,10 @@
       </div>
     </div>
   </div>
-
-
+  <!-- Alert at top when there is a new message
+      and the client isn't reading recent messages
+  -->
+  <div id="alertMessage"></div>
   <div class="container">
     <ul id="chat">
       <li>This is the beginning of the chat.</li>
@@ -47,7 +49,6 @@
     </ul>
   </div>
   <!-- Scroll to Bottom Button -->
-  <button id="scrollToBottom">\/</button>
   <form id="chatbar" action="" autocomplete="off">
     <label id="logo">Ch@pp!</label>
     <!-- Light/Dark Mode? -->
@@ -56,7 +57,8 @@
       <input type="radio">Light</input>
     </form> -->
 
-
+    <input type="checkbox" id="subscribe"/>
+    <label for="subscribe">Subscribe to Chat</label>
     <!-- User Input for Chat -->
     <input type="text" id="message" placeholder="Say something!" />
     <button id="send"><i class="fas fa-arrow-circle-right"></i></button>
@@ -73,12 +75,24 @@
     const end = document.getElementById('end');
     const userTyping = document.getElementById('userTyping');
     const scrollHere = document.getElementById('scrollHere');
+    const subscribe = document.getElementById('subscribe');
 
-    // Scroll to bottom button
-    document.getElementById('scrollToBottom').addEventListener('click', (e) => {
-      e.preventDefault();
+    // Scroll to bottom function/button
+    const scrollToBottom = () => {
       scrollHere.scrollIntoView({behavior:'smooth'});
-    });
+    }
+
+    // Subscribe to chat (scroll to bottom when there is a new message)
+    subscribe.addEventListener('change',()=>{
+      if(subscribe.checked)
+        scrollToBottom();
+    })   
+
+    // Alert: New Message
+    const alertMesage = () => {
+
+    }
+
     // Call button press when ENTER is pressed
     message.addEventListener('keydown', (e) => {
       if (e.keyCode === 13 && message.value != '') {
@@ -126,7 +140,7 @@
             let timestamp = `${d.getMonth()}/${d.getDate()}/${d.getFullYear()} ${d.getHours()}:${(d.getMinutes() < 10) ? "0" + d.getMinutes() : d.getMinutes()}`;
             socket.emit('new message', { user, msg, timestamp });
             // Scroll to bottom of chat when client sends message
-            scrollHere.scrollIntoView({behavior:'smooth'});
+            scrollToBottom();
             message.value = '';
           }
           else {
@@ -152,6 +166,8 @@
           if (data.user !== user || !data.user)
             message.classList.add('notYou');
           chat.insertBefore(message, end);
+          if(subscribe.checked)
+            scrollToBottom();
         });
 
         // Announce new user
@@ -160,6 +176,8 @@
           message.appendChild(document.createTextNode(`${user} has joined the chat!`));
           message.classList.add('userJoin');
           chat.insertBefore(message, end);
+          if(subscribe.checked)
+            scrollToBottom();
         });
 
         // User Disconnected
@@ -168,6 +186,8 @@
           message.appendChild(document.createTextNode(`${name} has left the chat.`));
           message.classList.add('userDisconnect');
           chat.insertBefore(message, end);
+          if(subscribe.checked)
+            scrollToBottom();
         });
 
         const userIsTyping = () => {
