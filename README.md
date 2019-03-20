@@ -34,6 +34,8 @@ Here's a little workaround, for testing purposes. To add more users to the chat,
 You can also chat with other users on different computers by accessing this project at:<br>
 https://doormatt-codefoo9-fullstack.herokuapp.com/
 <br>
+<br>
+<br>
 That's All Folks!
 
 
