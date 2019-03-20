@@ -19,10 +19,10 @@ After cloning this repository, open your terminal and `cd` into the root of the 
 
 Then, run the following commands:
 
-`npm install`
+### `npm install`
 Installs the project's dependencies.
 
-`npm run start`
+### `npm run start`
 Starts the project. Navigate to `http://localhost:8000` to view the application.
 
 Once the project loads, enter a username and begin chatting!
@@ -31,7 +31,7 @@ Oh boy... We have a problem. There aren't any other users to chat with!
 
 Here's a little workaround, for testing purposes. To add more users to the chat, simply open a new window and once again, navigate to `http://localhost:8000`. Enter a different username and start chatting with yourself!
 
-You can also chat with other users on different computers by accessing this project at:<br>
+You can also chat with other users on separate computers by accessing this project at:<br>
 https://doormatt-codefoo9-fullstack.herokuapp.com/
 <br>
 <br>
