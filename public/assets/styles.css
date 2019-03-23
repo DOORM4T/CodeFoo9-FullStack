@@ -315,7 +315,6 @@ body {
 }
 
 #alertMessage {
-  display:none;
   overflow:hidden;
   position:fixed;
   top:1rem;
@@ -324,7 +323,36 @@ body {
   margin: 0 1rem;
   border-radius:0 0 4px 4px;
   opacity:0.9;
-  height:48px;
+  height:0;
   background-color:var(--blueberry);
   border-top:2px solid #666;
+  color:#fff;
+  cursor:pointer;
+}
+
+#alertMessage.active {
+  animation-name:grow-down;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+}
+
+#alertMessage.fadeOut {
+  opacity:1;
+  animation-name:fadeOut;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+}
+
+/* Alert slide-down animation */
+@keyframes grow-down{
+  from {
+    height:0;
+  }
+  to {
+    height:48px;
+  }
+}
+
+#alertMessage #alertText {
+  margin-top:10px;
 }

@@ -33,7 +33,9 @@
   <!-- Alert at top when there is a new message
       and the client isn't reading recent messages
   -->
-  <div id="alertMessage"></div>
+  <div id="alertMessage">
+    <p id="alertText"></p>
+  </div>
   <div class="container">
     <ul id="chat">
       <li>This is the beginning of the chat.</li>
@@ -74,6 +76,8 @@
     const userTyping = document.getElementById('userTyping');
     const scrollHere = document.getElementById('scrollHere');
     const subscribe = document.getElementById('subscribe');
+    const alertMessage = document.getElementById('alertMessage');
+    const alertText = document.getElementById('alertText');
 
     // Scroll to bottom function/button
     const scrollToBottom = () => {
@@ -87,9 +91,20 @@
     })   
 
     // Alert: New Message
-    const alertMesage = () => {
-
+    const sendAlert = (msg) => {
+      alertText.innerText=msg;
+      alertMessage.className='active';
+      setTimeout(()=>{
+        alertMessage.classList.remove('active');
+      },
+      5000
+      );
     }
+
+    // Close Alert on Click
+    alertMessage.addEventListener('click',()=>{
+       alertMessage.classList.remove('active');
+    });
 
     // User "Login"
     let user; // User's name in the chat
@@ -158,16 +173,25 @@
           chat.insertBefore(message, end);
           if(subscribe.checked)
             scrollToBottom();
+          else if(data.user !== user) {
+            // Alert pop-up if user is not subscribed/at bottom of chat
+            sendAlert(`${data.user}: ${data.msg.substring(0,50)}${data.msg.length>50 ? '...':'.'}`);
+          }
         });
 
         // Announce new user
-        socket.on('announce user', (user) => {
-          let message = document.createElement('li');
-          message.appendChild(document.createTextNode(`${user} has joined the chat!`));
-          message.classList.add('userJoin');
-          chat.insertBefore(message, end);
-          if(subscribe.checked)
-            scrollToBottom();
+        socket.on('announce user', (person) => {
+          if(person !== user) {// Only alert to other users
+            let message = document.createElement('li');
+            message.appendChild(document.createTextNode(`${person} has joined the chat!`));
+            message.classList.add('userJoin');
+            chat.insertBefore(message, end);
+            if(subscribe.checked)
+              scrollToBottom();
+
+            // Alert pop-up if user is not subscribed/at bottom of chat
+            sendAlert(`${person} has joined the chat!`);
+          }
         });
 
         // User Disconnected
@@ -178,6 +202,8 @@
           chat.insertBefore(message, end);
           if(subscribe.checked)
             scrollToBottom();
+          // Alert pop-up if user is not subscribed/at bottom of chat
+          sendAlert(`${name} has left the chat.`);
         });
 
         // Call button press when ENTER is pressed
