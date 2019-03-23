@@ -16,8 +16,13 @@ client.connect(err => {
   // Initialize Socket.io
   const io = require('socket.io')(server);
 
+  // List of users in chat
+  let users = new Set();
+
   // On client connect
   io.on('connection', (socket) => {
+    socket.emit('get user list', [...users]);
+
     // Connect DB
     let collection = client.db("global-chat").collection("messages");
     let username;
@@ -47,6 +52,10 @@ client.connect(err => {
 
       // Announce new user to other users
       username = user;
+      users.add(username);
+      // Update list of users for clients
+      socket.emit('get user list', [...users]);
+
       io.emit('announce user', username);
       addAlert(`${user} has joined the chat!`);
     });
@@ -55,6 +64,10 @@ client.connect(err => {
     socket.on('disconnect', () => {
       if (username !== undefined) {
         console.log(`(ID:${id}) User disconnected...`)
+
+        users.delete(username);
+        socket.emit('get user list', [...users]);
+
         io.emit('user disconnected', username);
         addAlert(`${username} has left the chat.`);
       }

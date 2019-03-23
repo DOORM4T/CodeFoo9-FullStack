@@ -121,6 +121,7 @@ body {
 
 /* Logo. */
 #logo {
+  opacity:0;
   grid-area: logo;
   font-weight:800;
   color: var(--apricot);
@@ -130,7 +131,7 @@ body {
 
 #subscribeBox {
   grid-area: sub;
-  margin-bottom:8px;
+  margin-bottom:16px;
   text-align:left;
 }
 
@@ -162,7 +163,7 @@ body {
   color:var(--blueberry);
 }
 
-#message.shake {
+.shake {
   border-color:red;
   color:red;
   animation-name:shake;
@@ -318,9 +319,15 @@ body {
 }
 
 #username:focus {
-  transition:all 0.5s ease-out;
+  transition:border 0.5s ease-out;
   border-color:var(--blueberry);
 }
+
+#username.invalid {
+  border-color:red;
+  color:red;
+}
+
 /* Button */
 #joinChat{
   transition:all 0.3s ease-out;
