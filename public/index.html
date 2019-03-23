@@ -3,12 +3,10 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Fullstack Chat App: Code Foo 9 Application</title>
   <link rel="stylesheet" href="/assets/styles.css">
-  <!-- Animate.css CDN -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
   <!-- Sniglet Font Family CDN -->
   <link href="https://fonts.googleapis.com/css?family=Sniglet" rel="stylesheet">
   <!-- Font Awesome CDN -->
@@ -93,14 +91,6 @@
 
     }
 
-    // Call button press when ENTER is pressed
-    message.addEventListener('keydown', (e) => {
-      if (e.keyCode === 13 && message.value != '') {
-        send.classList.add('pressed');
-        setTimeout(() => send.classList.remove('pressed'), 100);
-      }
-    });
-
     // User "Login"
     let user; // User's name in the chat
     // SOCKET CONNECTION
@@ -145,7 +135,7 @@
           }
           else {
             // Invalid message
-            message.className = 'animated shake';
+            message.className = 'shake';
             message.setAttribute('disabled', true);
             setTimeout(() => {
               message.classList = '';
@@ -190,16 +180,25 @@
             scrollToBottom();
         });
 
-        const userIsTyping = () => {
-          socket.emit('user is typing', user);
-        }
-        message.addEventListener('keydown', userIsTyping);
+        // Call button press when ENTER is pressed
+        message.addEventListener('keydown', (e) => {
+          if (e.keyCode === 13 && message.value != '') {
+            send.classList.add('pressed');
+            setTimeout(() => {
+              send.classList.remove('pressed');
+              socket.emit('user stopped typing',user);
+            }
+            , 100);
+          }
+        });
+        // User Is Typing
         message.addEventListener('keyup', () => {
-          socket.emit('user stopped typing', user);
+          socket.emit('user is typing', user);
         });
 
+        // Display User is Typing
         socket.on('user is typing', users => {
-          if (users[0] !== undefined)
+          if (users[0] !== undefined && users[0] !== user)
             userTyping.innerHTML = ` ${(users.length > 1) ? 'Others are' : users[0] + " is"} typing...`;
           else
             userTyping.innerHTML = '';
