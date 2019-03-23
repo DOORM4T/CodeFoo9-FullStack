@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Fullstack Chat App: Code Foo 9 Application</title>
   <link rel="stylesheet" href="/assets/styles.css">
@@ -51,14 +51,12 @@
   <!-- Scroll to Bottom Button -->
   <form id="chatbar" action="" autocomplete="off">
     <label id="logo">Ch@pp!</label>
-    <!-- Light/Dark Mode? -->
-    <!-- <form id="theme">
-      <input type="radio">Dark</input>
-      <input type="radio">Light</input>
-    </form> -->
 
-    <input type="checkbox" id="subscribe"/>
-    <label for="subscribe">Subscribe to Chat</label>
+    <div id="subscribeBox">
+     <input type="checkbox" id="subscribe"/>
+      <i id="eye-con" class="fas fa-eye-slash"></i>
+    </div>
+
     <!-- User Input for Chat -->
     <input type="text" id="message" placeholder="Say something!" />
     <button id="send"><i class="fas fa-arrow-circle-right"></i></button>
@@ -78,6 +76,7 @@
     const subscribe = document.getElementById('subscribe');
     const alertMessage = document.getElementById('alertMessage');
     const alertText = document.getElementById('alertText');
+    const eyeCon = document.getElementById('eye-con');
 
     // Scroll to bottom function/button
     const scrollToBottom = () => {
@@ -86,8 +85,12 @@
 
     // Subscribe to chat (scroll to bottom when there is a new message)
     subscribe.addEventListener('change',()=>{
-      if(subscribe.checked)
+      if(subscribe.checked) {
+        eyeCon.className='fas fa-eye';
         scrollToBottom();
+      } else {
+        eyeCon.className='fas fa-eye-slash';
+      }
     })   
 
     // Alert: New Message
@@ -175,7 +178,7 @@
             scrollToBottom();
           else if(data.user !== user) {
             // Alert pop-up if user is not subscribed/at bottom of chat
-            sendAlert(`${data.user}: ${data.msg.substring(0,50)}${data.msg.length>50 ? '...':'.'}`);
+            sendAlert(`${data.user}: ${data.msg.substring(0,50)}${data.msg.length>50 ? '...':''}`);
           }
         });
 
