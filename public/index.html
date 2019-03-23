@@ -16,8 +16,7 @@
 
 <body>
   <!-- User "Authentication" -->
-  <!-- NOTE: Not actual authentication -->
-  <!-- Users can use any name to join the chat -->
+  <!-- NOTE: Not actual authentication. This only blocks duplicate usernames -->
   <div id="auth">
     <div id="darkness">
       <div id="authContainer">
@@ -50,7 +49,10 @@
   </div>
   <!-- Scroll to Bottom Button -->
   <form id="chatbar" action="" autocomplete="off">
-    <label id="logo">Ch@pp!</label>
+    <!-- <label id="logo">Ch@pp!</label> -->
+
+    <!-- User List Toggle -->
+    <i id="user-toggle" class="fas fa-users"></i>
 
     <div id="subscribeBox">
       <input type="checkbox" id="subscribe" />
@@ -61,6 +63,15 @@
     <input type="text" id="message" placeholder="Say something!" />
     <button id="send"><i class="fas fa-arrow-circle-right"></i></button>
   </form>
+
+  <!-- Expandable User List -->
+  <div id="users-container">
+    <ul id="userList">
+    </ul>
+  </div>
+
+
+
   <script src="/socket.io/socket.io.js"></script>
   <script defer>
     // DOM Elements
@@ -77,6 +88,15 @@
     const alertMessage = document.getElementById('alertMessage');
     const alertText = document.getElementById('alertText');
     const eyeCon = document.getElementById('eye-con');
+    const usersContainer = document.getElementById('users-container');
+    const userList = document.getElementById('userList');
+    const userToggle = document.getElementById('user-toggle');
+
+    // Expandable User List Functionality
+    userToggle.addEventListener('click', () => {
+      usersContainer.classList.toggle('expanded');
+    });
+
 
     // Scroll to bottom function/button
     const scrollToBottom = () => {
@@ -118,7 +138,12 @@
     let users = [];
     // Get list of current users
     socket.on('get user list', list => {
+      console.log(list)
       users = list;
+      userList.innerHTML = '<li>Users:</li>';
+      list.forEach(user => {
+        userList.innerHTML += `<li>${user}</li>`;
+      })
     });
 
     // Render all previous messages from DB

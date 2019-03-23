@@ -52,8 +52,8 @@ client.connect(err => {
 
       // Announce new user to other users
       username = user;
-      users.add(username);
       // Update list of users for clients
+      users.add(username);
       socket.emit('get user list', [...users]);
 
       io.emit('announce user', username);
