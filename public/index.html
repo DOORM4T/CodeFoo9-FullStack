@@ -315,7 +315,6 @@
 
     // Close user list on outside click
     window.addEventListener('click',(e)=>{
-      console.log(e.target.id);
       if(e.target.id !== 'users-container' && e.target.id !== 'user-toggle' && e.target.id !== 'userList' && e.target.parentElement.id !== 'userList') {
         usersContainer.classList.remove('expanded');
         userToggle.classList.remove('on');
