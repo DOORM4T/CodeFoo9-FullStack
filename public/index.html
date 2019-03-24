@@ -12,6 +12,10 @@
   <!-- Font Awesome CDN -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
     integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    
+  <!-- Tippy CDN (For tooltips) -->
+  <script src="https://unpkg.com/popper.js@1"></script>
+  <script src="https://unpkg.com/tippy.js@4"></script> 
 </head>
 
 <body>
@@ -94,6 +98,7 @@
 
     // Expandable User List Functionality
     userToggle.addEventListener('click', () => {
+      userToggle.classList.toggle('on');
       usersContainer.classList.toggle('expanded');
     });
 
@@ -138,11 +143,10 @@
     let users = [];
     // Get list of current users
     socket.on('get user list', list => {
-      console.log(list)
       users = list;
-      userList.innerHTML = '<li>Users:</li>';
-      list.forEach(user => {
-        userList.innerHTML += `<li>${user}</li>`;
+      userList.innerHTML='';
+      list.forEach(name => {
+        userList.innerHTML += `<li ${name === user ? 'style="color:green"':''}>${name === user ? '[You] ':''}${name}</li>`;
       })
     });
 
@@ -152,7 +156,7 @@
       data.forEach(item => {
         // console.log(item.message);
         let message = document.createElement('li');
-        message.innerHTML = `${(item.time) ? '<span class="timestamp">' + item.time + '</span>' : ''} ${(item.user === user) ? '[You]&nbsp' : ''} <span class="user">${item.user ? item.user + ":" : ''}</span>&nbsp&nbsp${item.message}`;
+        message.innerHTML = `${(item.time) ? '<span class="timestamp">' + item.time + '</span>' : ''}&nbsp;<span class="user">${item.user ? item.user + ":" : ''}</span>&nbsp&nbsp${item.message}`;
         // Styling if sender is not you/message is an announcement
         if (item.user !== user || !item.user)
           message.classList.add('notYou');
@@ -165,6 +169,13 @@
       if (username.value != '' && !users.includes(username.value) && (username.value.length <= 8)) {
         auth.className = 'hidden';
         user = username.value;
+
+        // Update Users List on User Join
+        userList.innerHTML='';
+        users.forEach(name => {
+          userList.innerHTML += `<li ${name === user ? 'style="color:green"':''}>${name === user ? '[You] ':''}${name}</li>`;
+        });
+        
         console.log(`Welcome to the chat, ${user}!`);
 
         // Announce new user
@@ -201,7 +212,7 @@
         // Add messages to chat
         socket.on('get message', data => {
           let message = document.createElement('li');
-          message.innerHTML = `<span class="timestamp">${data.timestamp}</span> ${(data.user === user) ? '[You]&nbsp:' : ''} <span class="user">${data.user}</span>&nbsp&nbsp${data.msg}`;
+          message.innerHTML = `<span class="timestamp">${data.timestamp}</span>&nbsp;<span class="user">${data.user}</span>&nbsp&nbsp${data.msg}`;
           // Styling if sender is not you/message is an announcement
           if (data.user !== user || !data.user)
             message.classList.add('notYou');
@@ -290,7 +301,26 @@
       }
     });
 
+    // Tippy Tool Tips
+    tippy(subscribe, {
+      content: "Subscribe to Chat",
+      placement:'top',
+      arrow:true
+    });
+    tippy(userToggle, {
+      content: "Users",
+      placement:'top',
+      arrow:true
+    });
 
+    // Close user list on outside click
+    window.addEventListener('click',(e)=>{
+      console.log(e.target.id);
+      if(e.target.id !== 'users-container' && e.target.id !== 'user-toggle' && e.target.id !== 'userList' && e.target.parentElement.id !== 'userList') {
+        usersContainer.classList.remove('expanded');
+        userToggle.classList.remove('on');
+      }
+    });
   </script>
 </body>
 

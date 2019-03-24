@@ -54,7 +54,7 @@ client.connect(err => {
       username = user;
       // Update list of users for clients
       users.add(username);
-      socket.emit('get user list', [...users]);
+      io.emit('get user list', [...users]);
 
       io.emit('announce user', username);
       addAlert(`${user} has joined the chat!`);
@@ -66,7 +66,7 @@ client.connect(err => {
         console.log(`(ID:${id}) User disconnected...`)
 
         users.delete(username);
-        socket.emit('get user list', [...users]);
+        io.emit('get user list', [...users]);
 
         io.emit('user disconnected', username);
         addAlert(`${username} has left the chat.`);
