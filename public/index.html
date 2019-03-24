@@ -162,6 +162,7 @@
           message.classList.add('notYou');
         chat.insertBefore(message, end);
       });
+      scrollToBottom();      
     });
 
     joinChat.addEventListener('click', (e) => {
@@ -181,8 +182,10 @@
         // Announce new user
         socket.emit('new user', user);
 
+
         // Chat Functions
         const sendMessage = (e) => {
+          socket.emit('user stopped typing', user);
           e.preventDefault();
           if (message.value != '') {
             // Use Regex to remove (potentially harmful) html tags from user input.
@@ -227,7 +230,6 @@
 
         // Announce new user
         socket.on('announce user', (person) => {
-          if (person !== user) {// Only alert to other users
             let message = document.createElement('li');
             message.appendChild(document.createTextNode(`${person} has joined the chat!`));
             message.classList.add('userJoin');
@@ -237,7 +239,6 @@
 
             // Alert pop-up if user is not subscribed/at bottom of chat
             sendAlert(`${person} has joined the chat!`);
-          }
         });
 
         // User Disconnected
